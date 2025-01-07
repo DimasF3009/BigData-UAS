@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
+from matplotlib.ticker import MaxNLocator
 
 # Membaca data dari file CSV
 df = pd.read_csv('populasi_kabupaten_bekasi.csv')
@@ -24,7 +25,7 @@ model = LinearRegression()
 model.fit(years, population)
 
 # Menentukan rentang tahun prediksi, misalnya dari tahun data terakhir sampai 2039
-pred_years = np.arange(df['Tahun'].iloc[-1], 2040).reshape(-1, 1)
+pred_years = np.arange(df['Tahun'].iloc[-1], 2029).reshape(-1, 1)
 
 # Prediksi populasi untuk tahun-tahun prediksi
 pred_population = model.predict(pred_years)
@@ -60,6 +61,9 @@ plt.xlabel('Tahun')
 plt.ylabel('Populasi')
 plt.legend()
 
+# Menyesuaikan tampilan sumbu X agar hanya menampilkan tahun genap tanpa koma
+plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True))  # Menampilkan angka integer tanpa koma
+
 # Visualisasi kepadatan penduduk
 plt.subplot(1, 2, 2)
 plt.scatter(df_combined['Tahun'], df_combined['Kepadatan Penduduk'], color='green', label='Kepadatan Penduduk', zorder=5)
@@ -68,6 +72,9 @@ plt.title('Kepadatan Penduduk Kabupaten Bekasi')
 plt.xlabel('Tahun')
 plt.ylabel('Kepadatan (jiwa/km²)')
 plt.legend()
+
+# Menyesuaikan sumbu X untuk hanya menampilkan tahun genap di kedua plot
+plt.xticks(np.arange(df_combined['Tahun'].min(), df_combined['Tahun'].max() + 1, 2))
 
 plt.tight_layout()
 plt.show()
